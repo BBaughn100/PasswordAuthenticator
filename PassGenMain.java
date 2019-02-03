@@ -52,7 +52,7 @@ public class PassGenMain {
 
 		if (newUser.equals("N")) {
 
-			File inFile = new File("Text.txt");
+			File inFile = new File("Text.txt"); // Your external file
 			Scanner inScan = new Scanner(inFile);
 			PrivateInfo pi = new PrivateInfo("", "", "", "");
 
@@ -91,7 +91,7 @@ public class PassGenMain {
 			System.out.print("Enter your first name: ");
 			String fname = in.nextLine();
 			
-			while (!Character.isUpperCase(fname.charAt(0))) {
+			while (!Character.isUpperCase(fname.charAt(0))) { // Wanted a name looks like a name; however, is not needed
 				System.out.println("You must start your name with a capital letter!");
 				System.out.print("Enter your first name: ");
 				fname = in.nextLine();
@@ -114,17 +114,18 @@ public class PassGenMain {
 
 			try {
 				File textFile = new File("Text.txt");
-
+				
+				// Use FileWriter instead of PrintWriter. The former will add to a file, the latter will overwrite a file
 				FileWriter pw = new FileWriter(textFile, true);
 
-				pw.write(fname + " " + lname);
+				pw.write(fname + " " + lname); // This line will go into the empty space
 				pw.write("\n");
 				pw.write(username);
 				pw.write("\n");
 				pw.write(password);
 				pw.write("\n");
 				pw.write("-1");
-				pw.write("\n");
+				pw.write("\n"); // Indicates a new line for a new user
 
 				pw.close();
 			} catch (IOException e) {
