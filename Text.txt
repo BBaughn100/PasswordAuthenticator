@@ -1,8 +1,4 @@
-Brendon Baughn
-BBaughn100
-Mrbaughn100
--1
-Jimin Lee
-LeeMaster
-TheLeest
+Firstname Lastname
+Username
+Password
 -1
