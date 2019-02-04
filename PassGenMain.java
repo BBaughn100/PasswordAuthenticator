@@ -1,6 +1,6 @@
 /*
  * Author: Brendon Baughn
- * Version: 1.2.03
+ * Version: 1.2.04
  * 
  * A viable password authenticator that is able to add new users
  */
@@ -126,14 +126,16 @@ public class PassGenMain {
 				// Use FileWriter instead of PrintWriter. The former will add to a file, the latter will overwrite a file
 				FileWriter pw = new FileWriter(textFile, true);
 
-				pw.write(fname + " " + lname); // This line will go into the empty space
-				pw.write("\n");
-				pw.write(username);
-				pw.write("\n");
-				pw.write(password);
-				pw.write("\n");
-				pw.write("-1");
-				pw.write("\n"); // Indicates a new line for a new user
+// 				pw.write(fname + " " + lname); This line will go into the empty space
+// 				pw.write("\n");
+// 				pw.write(username);
+// 				pw.write("\n");
+// 				pw.write(password);
+// 				pw.write("\n");
+// 				pw.write("-1");
+// 				pw.write("\n"); Indicates a new line for a new user
+				
+				pw.write(fname + " " + lname + "\n" + username + "\n" + password + "\n" + "-1" + "\n");
 
 				pw.close();
 			} catch (IOException e) {
