@@ -36,6 +36,17 @@ public class PassGenMain {
 
 		return pi;
 	}
+	
+	public static String checkName(Scanner in, String name) {
+		
+		while (!Character.isUpperCase(name.charAt(0))) {
+			System.out.println("You must start your name with a capital letter!");
+			System.out.print("Enter your first name: ");
+			name = in.nextLine();
+		}
+		
+		return name;
+	}
 
 	public static void main(String[] args) throws FileNotFoundException {
 		Scanner in = new Scanner(System.in);
@@ -90,21 +101,13 @@ public class PassGenMain {
 		} else if (newUser.equals("Y")) {
 			System.out.print("Enter your first name: ");
 			String fname = in.nextLine();
-			
-			while (!Character.isUpperCase(fname.charAt(0))) { // Wanted a name looks like a name; however, is not needed
-				System.out.println("You must start your name with a capital letter!");
-				System.out.print("Enter your first name: ");
-				fname = in.nextLine();
-			}
+
+			fname = checkName(in, fname);
 
 			System.out.print("Enter your last name: ");
 			String lname = in.nextLine();
-			
-			while (!Character.isUpperCase(lname.charAt(0))) {
-				System.out.println("You must start your name with a capital letter!");
-				System.out.print("Enter your first name: ");
-				lname = in.nextLine();
-			}
+
+			lname = checkName(in, lname);
 
 			System.out.print("Username: ");
 			String username = in.nextLine();
