@@ -1,6 +1,6 @@
 /*
  * Author: Brendon Baughn
- * Version: 1.2.04
+ * Version: 1.3.04
  * 
  * A viable password authenticator that is able to add new users
  */
@@ -12,6 +12,8 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 public class PassGenMain {
+	
+	// Be able to change passwords into certain 26 special characters. Caesar Cyper type thing?
 
 	public static PrivateInfo readNextSet(Scanner scan) {
 		PrivateInfo pi = new PrivateInfo("", "", "", "");
@@ -56,6 +58,7 @@ public class PassGenMain {
 	public static void main(String[] args) throws FileNotFoundException {
 		Scanner in = new Scanner(System.in);
 		List<PrivateInfo> list = new ArrayList<PrivateInfo>();
+		Crypto crypto = new basicCrypto();
 
 		System.out.print("Are you a new user? [Y/N]: ");
 		String newUser = in.nextLine().toUpperCase();
@@ -68,7 +71,7 @@ public class PassGenMain {
 
 		if (newUser.equals("N")) {
 
-			File inFile = new File("Text.txt"); // Your external file
+			File inFile = new File("Text.txt");
 			Scanner inScan = new Scanner(inFile);
 			PrivateInfo pi = new PrivateInfo("", "", "", "");
 
@@ -82,7 +85,6 @@ public class PassGenMain {
 				System.out.print("Enter Your Password: ");
 				String pass = in.nextLine();
 
-
 				while (inScan.hasNext()) {
 					pi = readNextSet(inScan);
 					list.add(pi);
@@ -90,14 +92,16 @@ public class PassGenMain {
 
 				for (int i = 0; i < list.size(); ++i) {
 					PrivateInfo myPI = list.get(i);
+					String dec = new String(crypto.decrypt(myPI.getPass().getBytes()));
 
 					if (user.equals(myPI.getUser())) { // If username is correct
-						if (pass.equals(myPI.getPass())) { // if username and password is correct
+						if (pass.equals(dec)) { // if username and password is correct
 							System.out.println("Welcome " + myPI.getName() + "!");
 						} else { // if username is correct but password is wrong
 							System.out.println("Username and/or password does not exist.");
 						}
-					} else if (!user.equals(myPI.getUser()) && pass.equals(myPI.getPass())) { // if username is wrong but password is correct
+						// if username is wrong but password is correct
+					} else if (!user.equals(myPI.getUser()) && pass.equals(dec)) {
 						System.out.println("Username and/or password does not exist.");
 					}
 				}
@@ -106,12 +110,12 @@ public class PassGenMain {
 		} else if (newUser.equals("Y")) {
 			System.out.print("Enter your first name: ");
 			String fname = in.nextLine();
-
+			
 			fname = checkName(in, fname, 0);
 
 			System.out.print("Enter your last name: ");
 			String lname = in.nextLine();
-
+			
 			lname = checkName(in, lname, 1);
 
 			System.out.print("Username: ");
@@ -122,20 +126,12 @@ public class PassGenMain {
 
 			try {
 				File textFile = new File("Text.txt");
-				
-				// Use FileWriter instead of PrintWriter. The former will add to a file, the latter will overwrite a file
-				FileWriter pw = new FileWriter(textFile, true);
 
-// 				pw.write(fname + " " + lname); This line will go into the empty space
-// 				pw.write("\n");
-// 				pw.write(username);
-// 				pw.write("\n");
-// 				pw.write(password);
-// 				pw.write("\n");
-// 				pw.write("-1");
-// 				pw.write("\n"); Indicates a new line for a new user
+				FileWriter pw = new FileWriter(textFile, true);
 				
-				pw.write(fname + " " + lname + "\n" + username + "\n" + password + "\n" + "-1" + "\n");
+				String enc = new String(crypto.encrypt(password.getBytes()));
+				
+				pw.write(fname + " " + lname + "\n" + username + "\n" + enc + "\n" + "-1" + "\n");
 
 				pw.close();
 			} catch (IOException e) {
