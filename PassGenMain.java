@@ -1,6 +1,6 @@
 /*
  * Author: Brendon Baughn
- * Version: 1.2
+ * Version: 1.2.03
  * 
  * A viable password authenticator that is able to add new users
  */
@@ -37,11 +37,16 @@ public class PassGenMain {
 		return pi;
 	}
 	
-	public static String checkName(Scanner in, String name) {
-		
+	public static String checkName(Scanner in, String name, int nameType) {
+		String type = "";
+		if (nameType == 0) {
+			type = "firstname";
+		} else {
+			type = "lastname";
+		}
 		while (!Character.isUpperCase(name.charAt(0))) {
 			System.out.println("You must start your name with a capital letter!");
-			System.out.print("Enter your first name: ");
+			System.out.print("Enter your " +  type +" name: ");
 			name = in.nextLine();
 		}
 		
@@ -102,12 +107,12 @@ public class PassGenMain {
 			System.out.print("Enter your first name: ");
 			String fname = in.nextLine();
 
-			fname = checkName(in, fname);
+			fname = checkName(in, fname, 0);
 
 			System.out.print("Enter your last name: ");
 			String lname = in.nextLine();
 
-			lname = checkName(in, lname);
+			lname = checkName(in, lname, 1);
 
 			System.out.print("Username: ");
 			String username = in.nextLine();
