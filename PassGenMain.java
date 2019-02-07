@@ -12,8 +12,6 @@ import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
 public class PassGenMain {
-	
-	// Be able to change passwords into certain 26 special characters. Caesar Cyper type thing?
 
 	public static PrivateInfo readNextSet(Scanner scan) {
 		PrivateInfo pi = new PrivateInfo("", "", "", "");
