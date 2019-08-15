@@ -1,6 +1,6 @@
 /*
  * Author: Brendon Baughn
- * Version: 1.3.04
+ * Version: 1.3.5
  * 
  * A viable password authenticator that is able to add new users
  */
@@ -11,10 +11,11 @@ import java.io.File;
 import java.io.FileNotFoundException;
 import java.io.FileWriter;
 import java.io.IOException;
+
 public class PassGenMain {
 
-	public static PrivateInfo readNextSet(Scanner scan) {
-		PrivateInfo pi = new PrivateInfo("", "", "", "");
+	public static PrivateInfo readNextSet(Scanner scan, PrivateInfo pi) {
+//		PrivateInfo pi = new PrivateInfo("", "", "", "");
 
 		boolean boo = false;
 		while (boo == false) {
@@ -36,7 +37,7 @@ public class PassGenMain {
 
 		return pi;
 	}
-	
+
 	public static String checkName(Scanner in, String name, int nameType) {
 		String type = "";
 		if (nameType == 0) {
@@ -49,7 +50,7 @@ public class PassGenMain {
 			System.out.print("Enter your " +  type +" name: ");
 			name = in.nextLine();
 		}
-		
+
 		return name;
 	}
 
@@ -84,10 +85,11 @@ public class PassGenMain {
 				String pass = in.nextLine();
 
 				while (inScan.hasNext()) {
-					pi = readNextSet(inScan);
+					pi = readNextSet(inScan, pi);
 					list.add(pi);
 				}
-
+				
+				int count = 0;
 				for (int i = 0; i < list.size(); ++i) {
 					PrivateInfo myPI = list.get(i);
 					String dec = new String(crypto.decrypt(myPI.getPass().getBytes()));
@@ -95,12 +97,15 @@ public class PassGenMain {
 					if (user.equals(myPI.getUser())) { // If username is correct
 						if (pass.equals(dec)) { // if username and password is correct
 							System.out.println("Welcome " + myPI.getName() + "!");
+							++count;
 						} else { // if username is correct but password is wrong
 							System.out.println("Username and/or password does not exist.");
+							++count;
 						}
-						// if username is wrong but password is correct
-					} else if (!user.equals(myPI.getUser()) && pass.equals(dec)) {
-						System.out.println("Username and/or password does not exist.");
+					} else if (!user.equals(myPI.getUser())) { // if username is incorrect
+						if (i == list.size() - 1 && count == 0) {
+							System.out.println("Username and password is incorrect");
+						}
 					}
 				}
 			}
@@ -108,12 +113,12 @@ public class PassGenMain {
 		} else if (newUser.equals("Y")) {
 			System.out.print("Enter your first name: ");
 			String fname = in.nextLine();
-			
+
 			fname = checkName(in, fname, 0);
 
 			System.out.print("Enter your last name: ");
 			String lname = in.nextLine();
-			
+
 			lname = checkName(in, lname, 1);
 
 			System.out.print("Username: ");
@@ -126,9 +131,9 @@ public class PassGenMain {
 				File textFile = new File("Text.txt");
 
 				FileWriter pw = new FileWriter(textFile, true);
-				
+
 				String enc = new String(crypto.encrypt(password.getBytes()));
-				
+
 				pw.write(fname + " " + lname + "\n" + username + "\n" + enc + "\n" + "-1" + "\n");
 
 				pw.close();
